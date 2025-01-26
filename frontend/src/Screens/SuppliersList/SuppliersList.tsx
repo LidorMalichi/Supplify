@@ -159,7 +159,6 @@ const SuppliersListScreen = () => {
         </View>
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <Text>טוען...</Text>
           </View>
         ) : (
           <FlatList

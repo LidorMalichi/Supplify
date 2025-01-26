@@ -11,7 +11,8 @@ import RegisterScreen from './src/Screens/registration/registration';
  import AddSupplierScreen from './src/Screens/AddSupplir/AddSupplir';
 import AddProductScreen from './src/Screens/AddProduct/AddProduct';
 import SuppliersListScreen from './src/Screens/SuppliersList/SuppliersList';
-export const API_BASE_URL = 'http://10.9.22.104:8080';
+import ProductListScreen from './src/Screens/ProductList/ProductList';
+export const API_BASE_URL = 'http:///10.0.0.10:8080';
 
 
 export type RootStackParamList = {
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   AddSupplier:undefined;
   AddProduct: undefined;
   SuppliersList:undefined;
+  ProductList:undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -42,6 +44,7 @@ const App = () => {
       <Stack.Screen name="AddSupplier" component={AddSupplierScreen} />
       <Stack.Screen name="SuppliersList" component={SuppliersListScreen} />
       <Stack.Screen name="AddProduct" component={AddProductScreen} />
+      <Stack.Screen name="ProductList" component={ProductListScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

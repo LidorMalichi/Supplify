@@ -21,6 +21,7 @@ public class Business {
     @Column(nullable = false, unique = true)
     private String email;
 
+
     private String address;
     private String phone;
 }

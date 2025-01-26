@@ -30,7 +30,7 @@ public class BusinessSupplier {
         private int supplierId;
     }
 
-    // Constructor for convenience
+    // Constructor for convenienceS
     public BusinessSupplier(int businessId, int supplierId) {
         this.id = new BusinessSupplierId(businessId, supplierId);
     }

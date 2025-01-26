@@ -1,59 +1,38 @@
 package com.Supplify.Supplify.Services;
+
 import com.Supplify.Supplify.entities.Product;
+import com.Supplify.Supplify.entities.Supplier;
+import com.Supplify.Supplify.entities.SupplierProduct;
+import com.Supplify.Supplify.repositories.SupplierProductRepo;
 import com.Supplify.Supplify.repositories.ProductRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
-
+import java.util.stream.Collectors;
 @Service
+@AllArgsConstructor
 public class ProductService {
+    private final ProductRepo productRepo;
+    private final SupplierProductRepo supplierProductRepo;
+    private final SupplierService supplierService;
 
-    private final ProductRepo productRepository;
-
-    @Autowired
-    public ProductService(ProductRepo productRepository) {
-        this.productRepository = productRepository;
+    public Product createProduct(Product product, int supplierId) {
+        Product savedProduct = productRepo.save(product);
+        SupplierProduct supplierProduct = new SupplierProduct(supplierId, savedProduct.getId());
+        supplierProductRepo.save(supplierProduct);
+        return savedProduct;
     }
 
-    // Retrieve all products
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getProductsByBusinessId(Integer businessId) {
+        List<Supplier> suppliers = supplierService.getSuppliersByBusinessId(businessId);
+        List<Integer> supplierIds = suppliers.stream()
+                .map(Supplier::getSupplierId)
+                .collect(Collectors.toList());
+        List<SupplierProduct> supplierProducts = supplierProductRepo.findByIdSupplierIdIn(supplierIds);
+        List<Integer> productIds = supplierProducts.stream()
+                .map(sp -> sp.getId().getProductId())
+                .collect(Collectors.toList());
+        return productRepo.findAllById(productIds);
     }
-
-    // Retrieve a product by ID
-    public Optional<Product> getProductById(int productId) {
-        return productRepository.findById(productId);
-    }
-
-    // Add a new product
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
-    }
-
-    // Update an existing product
-    public Product updateProduct(int productId, Product updatedProduct) {
-        return productRepository.findById(productId)
-                .map(product -> {
-                    product.setSupplierId(updatedProduct.getSupplierId());
-                    product.setProductName(updatedProduct.getProductName());
-                    product.setDescription(updatedProduct.getDescription());
-                    product.setBasePrice(updatedProduct.getBasePrice());
-                    product.setStockQuantity(updatedProduct.getStockQuantity());
-                    return productRepository.save(product);
-                })
-                .orElseThrow(() -> new IllegalArgumentException("Product with ID " + productId + " not found"));
-    }
-
-    // Delete a product by ID
-    public void deleteProduct(int productId) {
-        if (!productRepository.existsById(productId)) {
-            throw new IllegalArgumentException("Product with ID " + productId + " not found");
-        }
-        productRepository.deleteById(productId);
-    }
-    // Find all suppliers that have a specific product
-  //  public List<Integer> findSuppliersByProductName(String productName) {
-       // return productsRepository.findSuppliersByProductName(productName);
-   // }
 }
