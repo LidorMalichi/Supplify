@@ -135,19 +135,19 @@ const ProductList = () => {
 const styles = StyleSheet.create({
  container: {
    flex: 1,
+   flexDirection: 'row-reverse',
    backgroundColor: '#F6F7FC',
  },
  mainContent: {
    flex: 1,
+   
  },
  header: {
-   flexDirection: 'row-reverse',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   padding: 16,
-   backgroundColor: 'white',
-   borderBottomWidth: 1,
-   borderBottomColor: '#E5E7EB',
+  flexDirection: 'row-reverse',
+  alignItems: 'center',
+  padding: 16,
+  borderBottomWidth: 1,
+  borderBottomColor: '#E1E1E1',
  },
  headerTitle: {
    fontSize: 20,
