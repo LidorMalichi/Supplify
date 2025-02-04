@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
 import { RootStackParamList } from '../../../App'; 
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
+import LoginUser from "../../models/LoginUser";
+import { doPost } from '../../utils/HTTPRequests';
+import { globals } from '../../utils/Globals';
+
 
 
 
@@ -12,6 +17,38 @@ type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'
 
 const LoginScreen = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
+
+  const configureGoogleSignIn =  () => {
+    GoogleSignin.configure();
+  };
+
+  useEffect(() => {
+    configureGoogleSignIn();
+  });
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('Google Sign-In successful:', userInfo);
+      // Handle successful login and navigate to Home or handle user info
+      navigation.navigate('Register');
+    } catch (error) {
+      console.error('Google Sign-In error:', error);
+    }
+  };
+
+  const handleLogin = async () => {
+    let user = new LoginUser(username, password);
+
+    await doPost(globals.account.login, user, false)
+      .then((response) => {
+        console.log(response);
+        navigation.navigate('Home');
+      })
+
+
+  };
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,11 +86,21 @@ const LoginScreen = () => {
         {/* כפתור התחברות */}
         <TouchableOpacity 
           style={styles.button} 
-          onPress={() => navigation.navigate('Home')} // ניווט למסך הבית
+          onPress={() => handleLogin} // ניווט למסך הבית
       >
           <Icon name="log-in" size={20} color="white" style={styles.buttonIcon} />
           <Text style={styles.buttonText}>התחבר</Text>
         </TouchableOpacity>
+
+        {/* Google Sign-In Button */}
+        <View style={styles.button}>
+          <GoogleSigninButton
+            style={{ width: 192, height: 48 }}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={handleGoogleSignIn}
+          />
+        </View>
 
         {/* קישורים לשכחת סיסמא וההרשמה */}
         <View style={styles.linkContainer}>

@@ -38,6 +38,14 @@ public class User {
     @NonNull
     private String email;
 
+    @Column(name = "business_name", nullable = false, length = 50)
+    @NonNull
+    private String businessName;
+
+    @Column(name = "phone", nullable = false, length = 10)
+    @NonNull
+    private String phone;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @org.hibernate.annotations.CreationTimestamp

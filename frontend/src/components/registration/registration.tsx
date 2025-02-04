@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { 
   View, Text, TextInput, TouchableOpacity, 
-  StyleSheet, SafeAreaView 
+  StyleSheet, SafeAreaView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Feather';
-import { RootStackParamList } from '../../../App'; 
+import { RootStackParamList } from '../../../App';
+import {ToastPromise} from '../../utils/ToastPromise';
+import { doPost } from '../../utils/HTTPRequests';
+import { globals } from '../../utils/Globals';
 
 type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
 
@@ -16,6 +19,7 @@ const SignUpScreen = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [businessName, setBusinessName] = useState('');
+  const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,10 +30,14 @@ const SignUpScreen = () => {
     console.log('הרשמה:', { 
       firstName, 
       lastName, 
-      businessName, 
+      businessName,
+      username, 
       phone, 
-      email 
+      email,
+      password 
     });
+
+    const newAccount = async () => { await ToastPromise(doPost(globals.account.register, { firstName, lastName, businessName, phone, email, password })); };
     
     // לאחר הרשמה, עבור למסך ההתחברות
     navigation.navigate('Login');
@@ -62,6 +70,14 @@ const SignUpScreen = () => {
           placeholder="שם העסק"
           value={businessName}
           onChangeText={setBusinessName}
+          placeholderTextColor="#A0A0A0"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="שם משתמש”"
+          value={username}
+          onChangeText={setUsername}
           placeholderTextColor="#A0A0A0"
         />
 
