@@ -1,4 +1,4 @@
-package com.Supplify.Supplify.Services;
+package com.Supplify.Supplify.services;
 
 import com.Supplify.Supplify.entities.User;
 import com.Supplify.Supplify.repositories.UserRepo;
