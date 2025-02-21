@@ -17,6 +17,8 @@ export const globals = {
 
     SUPPLIERS:{
      createSupplier: `${PRODUCTION_URL}${SUPPLIERS}/createSupplier`,
+     displaySupplier: `${PRODUCTION_URL}${SUPPLIERS}/displaySupplier`,
+     deleteSupplier: `${PRODUCTION_URL}${SUPPLIERS}/deleteSupplier`,
     },
     PRODUCT:{
     createProduct: `${PRODUCTION_URL}${PRODUCT}/createProduct`,
